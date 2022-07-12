@@ -30,7 +30,7 @@ export class UsuarioService {
 
   public async update(id: number, usuario: Usuario): Promise<void> {
     let usuarioDB = await this.get(id);
-    usuarioDB.nombreUsuario = usuario.nombreUsuario;
+    usuarioDB.email = usuario.email;
     usuarioDB.contrasena = usuario.contrasena;
     await usuarioDB.save();
   }

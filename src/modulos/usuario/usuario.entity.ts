@@ -4,7 +4,7 @@ import { Column, Entity } from 'typeorm';
 @Entity('usuario')
 export class Usuario extends BaseModel {
   @Column({ type: 'varchar', nullable: false })
-  nombreUsuario: string;
+  email: string;
 
   @Column({ type: 'varchar', nullable: false })
   contrasena: string;
