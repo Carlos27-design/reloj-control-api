@@ -9,7 +9,7 @@ export class TrabajadorService {
     const trabajador = await trabajadorRepository
       .createQueryBuilder('Trabajador')
       .where('Trabajador.id = :id', { id: id })
-      .andWhere('Trabajadores.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere('Trabajador.estado = :estado', { estado: estado.ACTIVO })
       .getOne();
 
     if (!trabajador) throw new NotFoundException();
