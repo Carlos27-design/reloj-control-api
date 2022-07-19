@@ -1,5 +1,5 @@
 import { BaseModel } from 'src/shared/base-model';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 
 @Entity('trabajador')
 export class Trabajador extends BaseModel {
@@ -9,6 +9,6 @@ export class Trabajador extends BaseModel {
   @Column({ type: 'varchar', nullable: false })
   apellido: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', nullable: false, unique: true })
   rut: string;
 }

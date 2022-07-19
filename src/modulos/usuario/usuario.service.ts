@@ -7,9 +7,11 @@ import { usuarioRepository } from './usuario.repository';
 export class UsuarioService {
   public async get(id: number): Promise<Usuario> {
     const usuario = await usuarioRepository
-      .createQueryBuilder('usuario')
-      .where('usuario.id = :id', { id: id })
-      .andWhere('usuario.estado = :estado', { estado: estado.ACTIVO })
+      .createQueryBuilder('Usuario')
+      .leftJoinAndSelect('Usuario.Roles', 'Rol')
+      .leftJoinAndSelect('Usuario.Trabajadores', 'Trabajador')
+      .where('Usuario.id = :id', { id: id })
+      .andWhere('Usuario.estado = :estado', { estado: estado.ACTIVO })
       .getOne();
 
     if (!usuario) throw new NotFoundException();
@@ -20,6 +22,8 @@ export class UsuarioService {
   public getAll(): Promise<Usuario[]> {
     return usuarioRepository
       .createQueryBuilder('Usuario')
+      .leftJoinAndSelect('Usuario.Roles', 'Rol')
+      .leftJoinAndSelect('Usuario.Trabajadores', 'Trabajador')
       .where('Usuario.estado = :estado', { estado: estado.ACTIVO })
       .getMany();
   }
@@ -32,6 +36,7 @@ export class UsuarioService {
     let usuarioDB = await this.get(id);
     usuarioDB.email = usuario.email;
     usuarioDB.contrasena = usuario.contrasena;
+    usuarioDB.Roles = usuario.Roles;
     await usuarioDB.save();
   }
 
