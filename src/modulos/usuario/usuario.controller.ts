@@ -27,8 +27,8 @@ export class UsuarioController {
   }
 
   @Post()
-  create(@Body() usuario: Usuario): Promise<Usuario> {
-    return this._usuarioService.create(usuario);
+  async create(@Body() usuario: Usuario): Promise<Usuario> {
+    return await this._usuarioService.create(usuario);
   }
 
   @Patch(':id')
