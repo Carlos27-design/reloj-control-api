@@ -29,6 +29,7 @@ export class AuthService {
     return {
       ...usuario,
       token: this.getJwtToken({
+        sub: usuario.id,
         email: usuario.email,
         roles: usuario.Roles.rol,
         trabajador:
