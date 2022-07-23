@@ -27,6 +27,13 @@ export class AuthService {
     }
 
     return {
+      usuario: {
+        id: usuario.id,
+        name: usuario.Trabajadores.nombre + ' ' + usuario.Trabajadores.apellido,
+        email: usuario.email,
+        avatar: '',
+        status: usuario.estado,
+      },
       ...usuario,
       token: this.getJwtToken({
         sub: usuario.id,
@@ -43,5 +50,16 @@ export class AuthService {
   private getJwtToken(payload: JwtPayload) {
     const token = this._jwtService.sign(payload);
     return token;
+  }
+
+  public async getPerfil(email: string): Promise<any> {
+    const usuario = await this._usuarioService.buscarUsuario(email);
+    return {
+      id: usuario.id,
+      name: usuario.Trabajadores.nombre + ' ' + usuario.Trabajadores.apellido,
+      email: usuario.email,
+      avatar: '',
+      status: usuario.estado,
+    };
   }
 }

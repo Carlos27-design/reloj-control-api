@@ -7,8 +7,12 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { timeStamp } from 'console';
+import { JwtAuthGuard } from '../usuario/auth/local-auth.guard';
 import { Salida } from './salida.entity';
 import { SalidaService } from './salida.service';
 
@@ -21,14 +25,18 @@ export class SalidaController {
     return this._salidaService.get(id);
   }
 
+  @UseGuards(JwtAuthGuard, AuthGuard())
   @Get()
-  getAll(): Promise<Salida[]> {
-    return this._salidaService.getAll();
+  getAll(@Request() req): Promise<Salida[]> {
+    const trabajadorId = req.user.Trabajadores.id;
+    return this._salidaService.getAll(trabajadorId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() salida: Salida): Promise<Salida> {
-    return this._salidaService.create(salida);
+  create(@Body() salida: Salida, @Request() req): Promise<Salida> {
+    const trabajadorId = req.user.Trabajadores.id;
+    return this._salidaService.create(salida, trabajadorId);
   }
 
   @Patch(':id')

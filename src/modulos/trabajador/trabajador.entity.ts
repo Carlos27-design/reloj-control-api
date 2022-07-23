@@ -1,5 +1,5 @@
 import { BaseModel } from 'src/shared/base-model';
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Entrada } from '../entrada/entrada.entity';
 import { Salida } from '../salida/salida.entity';
 
@@ -14,11 +14,9 @@ export class Trabajador extends BaseModel {
   @Column({ type: 'varchar', nullable: false, unique: true })
   rut: string;
 
-  @ManyToMany(() => Entrada)
-  @JoinTable()
+  @OneToMany(() => Entrada, (entrada) => entrada.Trabajador)
   Entradas: Entrada[];
 
-  @ManyToMany(() => Salida)
-  @JoinTable()
+  @OneToMany(() => Salida, (salida) => salida.Trabajador)
   Salidas: Salida[];
 }

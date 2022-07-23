@@ -4,6 +4,7 @@ import { TrabajadorService } from './trabajador.service';
 
 @Module({
   controllers: [TrabajadorController],
-  providers: [TrabajadorService]
+  providers: [TrabajadorService],
+  exports: [TrabajadorService],
 })
 export class TrabajadorModule {}
