@@ -5,6 +5,7 @@ import {
   Get,
   UseGuards,
   Request,
+  SetMetadata,
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';

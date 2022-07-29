@@ -10,17 +10,12 @@ export class TrabajadorService {
       .createQueryBuilder('Trabajador')
       .where('Trabajador.id = :id', { id: id })
       .leftJoinAndSelect(
-        'Trabajador.Entradas',
-        'Entrada',
-        'Entrada.estado = :estadoEntrada',
-        { estadoEntrada: estado.ACTIVO },
+        'Trabajador.Registros',
+        'Registro',
+        'Registro.estado = :estadoRegistro',
+        { estadoRegistro: estado.ACTIVO },
       )
-      .leftJoinAndSelect(
-        'Trabajador.Salidas',
-        'Salida',
-        'Salida.estado = :estadoSalida',
-        { estadoSalida: estado.ACTIVO },
-      )
+
       .andWhere('Trabajador.estado = :estado', { estado: estado.ACTIVO })
       .getOne();
 
