@@ -4,7 +4,6 @@ import { Trabajador } from '../trabajador/trabajador.entity';
 import { TrabajadorService } from '../trabajador/trabajador.service';
 import { registroRepository } from './registro.repository';
 import { Registro } from './regitro.entity';
-import * as SendGrid from '@sendgrid/mail';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -12,9 +11,7 @@ export class RegistroService {
   constructor(
     private trabajadorService: TrabajadorService,
     private readonly _configService: ConfigService,
-  ) {
-    SendGrid.setApiKey(this._configService.get<string>('SEND_GRID_KEY'));
-  }
+  ) {}
   async get(id: number): Promise<Registro> {
     const registro = await registroRepository
       .createQueryBuilder('Registro')
@@ -37,11 +34,7 @@ export class RegistroService {
       .getMany();
   }
 
-  async create(
-    registro: Registro,
-    trabajadorId: number,
-    email: string,
-  ): Promise<Registro> {
+  async create(registro: Registro, trabajadorId: number): Promise<Registro> {
     const trabajador = await this.trabajadorService.get(trabajadorId);
     registro.Trabajador = trabajador;
     registro.fecha = new Date(registro.fecha);
