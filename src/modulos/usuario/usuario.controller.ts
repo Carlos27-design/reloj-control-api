@@ -22,6 +22,8 @@ export class UsuarioController {
   constructor(private _usuarioService: UsuarioService) {}
 
   @Get(':id')
+  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
+  @UseGuards(JwtAuthGuard, UserRoleGuard)
   get(@Param('id', ParseIntPipe) id: number): Promise<Usuario> {
     return this._usuarioService.get(id);
   }

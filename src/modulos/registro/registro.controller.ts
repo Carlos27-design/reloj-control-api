@@ -81,7 +81,7 @@ export class RegistroController {
                <br/>
                <b>Fecha: ${fechaSalida}</b>
                <br/>
-               <b>Hora: ${salida}</b>`, // html body, // html body
+               <b>Hora: ${salida}</b>`, // html body
       });
     }
 

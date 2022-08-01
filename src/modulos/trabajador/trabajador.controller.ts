@@ -42,6 +42,8 @@ export class TrabajadorController {
   }
 
   @Patch(':id')
+  @RoleProtected(ValidRoles.ADMINISTRADOR)
+  @UseGuards(JwtAuthGuard, UserRoleGuard)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() trabajador: Trabajador,
@@ -50,6 +52,8 @@ export class TrabajadorController {
   }
 
   @Delete(':id')
+  @RoleProtected(ValidRoles.ADMINISTRADOR)
+  @UseGuards(JwtAuthGuard, UserRoleGuard)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this._trabajadorService.delete(id);
   }
