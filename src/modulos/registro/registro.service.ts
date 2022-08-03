@@ -5,13 +5,11 @@ import { TrabajadorService } from '../trabajador/trabajador.service';
 import { registroRepository } from './registro.repository';
 import { Registro } from './regitro.entity';
 import { ConfigService } from '@nestjs/config';
+import { stringify } from 'querystring';
 
 @Injectable()
 export class RegistroService {
-  constructor(
-    private trabajadorService: TrabajadorService,
-    private readonly _configService: ConfigService,
-  ) {}
+  constructor(private trabajadorService: TrabajadorService) {}
   async get(id: number): Promise<Registro> {
     const registro = await registroRepository
       .createQueryBuilder('Registro')
@@ -41,9 +39,13 @@ export class RegistroService {
     let registroNuevo = await this.getRegistroHoy(trabajador, registro.fecha);
     if (registro.entrada) {
       registroNuevo.entrada = new Date(registro.entrada);
+      registroNuevo.latitudEntrada = registro.latitudEntrada;
+      registroNuevo.longitudEntrada = registro.longitudEntrada;
     }
     if (registro.salida) {
       registroNuevo.salida = new Date(registro.salida);
+      registroNuevo.latitudSalida = registro.latitudSalida;
+      registroNuevo.longitudSalida = registro.longitudSalida;
     }
 
     return await registroNuevo.save();
@@ -77,12 +79,14 @@ export class RegistroService {
       })
       .andWhere('Registro.fecha = :fecha', { fecha: cadena })
       .andWhere('Registro.estado = :estado', { estado: estado.ACTIVO })
+
       .getOne();
 
     if (!registro) {
       let registroNuevo = new Registro();
       registroNuevo.Trabajador = trabajador;
       registroNuevo.fecha = fecha;
+
       return registroRepository.save(registroNuevo);
     }
 

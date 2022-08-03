@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Auth } from '../usuario/auth/decorators/auth.decorator';
 import { RoleProtected } from '../usuario/auth/decorators/role-protected.decorator';
 import { ValidRoles } from '../usuario/auth/interface';
 import { JwtAuthGuard } from '../usuario/auth/local-auth.guard';
@@ -22,29 +23,25 @@ export class RolController {
   constructor(private _rolService: RolService) {}
 
   @Get(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   get(@Param('id', ParseIntPipe) id: number): Promise<Rol> {
     return this._rolService.get(id);
   }
 
   @Get()
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   getAll(): Promise<Rol[]> {
     return this._rolService.getAll();
   }
 
   @Post()
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   create(@Body() rol: Rol): Promise<Rol> {
     return this._rolService.create(rol);
   }
 
   @Patch(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() rol: Rol,
@@ -53,8 +50,7 @@ export class RolController {
   }
 
   @Delete(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this._rolService.delete(id);
   }

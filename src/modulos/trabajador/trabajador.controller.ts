@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Auth } from '../usuario/auth/decorators/auth.decorator';
 import { RoleProtected } from '../usuario/auth/decorators/role-protected.decorator';
 import { ValidRoles } from '../usuario/auth/interface';
 import { JwtAuthGuard } from '../usuario/auth/local-auth.guard';
@@ -21,29 +22,25 @@ export class TrabajadorController {
   constructor(private _trabajadorService: TrabajadorService) {}
 
   @Get(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
   get(@Param('id', ParseIntPipe) id: number): Promise<Trabajador> {
     return this._trabajadorService.get(id);
   }
 
   @Get()
-  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
   getAll(): Promise<Trabajador[]> {
     return this._trabajadorService.getAll();
   }
 
   @Post()
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   create(@Body() trabajador: Trabajador): Promise<Trabajador> {
     return this._trabajadorService.create(trabajador);
   }
 
   @Patch(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() trabajador: Trabajador,
@@ -52,8 +49,7 @@ export class TrabajadorController {
   }
 
   @Delete(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this._trabajadorService.delete(id);
   }

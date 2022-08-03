@@ -7,14 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
-import { RoleProtected } from './auth/decorators/role-protected.decorator';
+import { Auth } from './auth/decorators/auth.decorator';
 import { ValidRoles } from './auth/interface';
-import { JwtAuthGuard } from './auth/local-auth.guard';
-import { UserRoleGuard } from './auth/user-role.guard';
 import { Usuario } from './usuario.entity';
-
 import { UsuarioService } from './usuario.service';
 
 @Controller('usuario')
@@ -22,29 +18,25 @@ export class UsuarioController {
   constructor(private _usuarioService: UsuarioService) {}
 
   @Get(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   get(@Param('id', ParseIntPipe) id: number): Promise<Usuario> {
     return this._usuarioService.get(id);
   }
 
   @Get()
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   getAll(): Promise<Usuario[]> {
     return this._usuarioService.getAll();
   }
 
   @Post()
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   async create(@Body() usuario: Usuario): Promise<Usuario> {
     return await this._usuarioService.create(usuario);
   }
 
   @Patch(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() usuario: Usuario,
@@ -53,8 +45,7 @@ export class UsuarioController {
   }
 
   @Delete(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this._usuarioService.delete(id);
   }

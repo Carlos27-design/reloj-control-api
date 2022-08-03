@@ -19,26 +19,28 @@ import { UserRoleGuard } from '../usuario/auth/user-role.guard';
 import { RegistroService } from './registro.service';
 import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
+import { Auth } from '../usuario/auth/decorators/auth.decorator';
+import { Validate } from 'class-validator';
 
 @Controller('registro')
 export class RegistroController {
   constructor(private registroService: RegistroService) {}
 
   @Get(':id')
-  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
+  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
   get(@Param('id', ParseIntPipe) id: number): Promise<Registro> {
     return this.registroService.get(id);
   }
-  @UseGuards(JwtAuthGuard)
+
   @Get()
+  @Auth()
   getAll(@Request() req): Promise<Registro[]> {
     const trabajadorId = req.user.Trabajadores.id;
     return this.registroService.getAll(trabajadorId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @Auth()
   async create(@Body() registro: Registro, @Request() req): Promise<Registro> {
     const trabajadorId = req.user.Trabajadores.id;
     const correo = req.user.email;
@@ -65,7 +67,10 @@ export class RegistroController {
                <br/>
                <b>Fecha: ${fechaEntrada}</b>
                <br/>
-               <b>Hora: ${entrada}</>`, // html body
+               <b>Hora: ${entrada}</b>
+               <br>
+               <b>Ubicación: ${registro.latitudEntrada},  ${registro.longitudEntrada}</b>
+               `, // html body
       });
     }
     if (registro.salida) {
@@ -81,16 +86,18 @@ export class RegistroController {
                <br/>
                <b>Fecha: ${fechaSalida}</b>
                <br/>
-               <b>Hora: ${salida}</b>`, // html body
+               <b>Hora: ${salida}</b>
+               <br>
+               <b>Ubicación: ${registro.latitudSalida}, ${registro.longitudSalida}</b>
+               `, // html body
       });
     }
 
     return this.registroService.create(registro, trabajadorId);
   }
 
-  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
   @Patch(':id')
+  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() registro: Registro,
@@ -98,9 +105,8 @@ export class RegistroController {
     return this.registroService.update(id, registro);
   }
 
-  @RoleProtected(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  @UseGuards(JwtAuthGuard, UserRoleGuard)
   @Delete(':id')
+  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.registroService.delete(id);
   }

@@ -13,6 +13,18 @@ export class Registro extends BaseModel {
   @Column({ type: 'datetime', nullable: true })
   salida: Date;
 
+  @Column({ type: 'varchar', nullable: true })
+  longitudEntrada: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  latitudEntrada: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  longitudSalida: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  latitudSalida: string;
+
   @ManyToOne(() => Trabajador, { nullable: false })
   Trabajador: Trabajador;
 }
