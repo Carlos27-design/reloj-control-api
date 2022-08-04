@@ -4,7 +4,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 
 import { RolModule } from './rol/rol.module';
 
-//import { AuthModule } from './usuario/auth/auth.module';
+import { AuthModule } from './usuario/auth/auth.module';
 import { RegistroModule } from './registro/registro.module';
 
 @Module({
@@ -12,7 +12,7 @@ import { RegistroModule } from './registro/registro.module';
     UsuarioModule,
     TrabajadorModule,
     RolModule,
-    //AuthModule,
+    AuthModule,
     RegistroModule,
   ],
 })
