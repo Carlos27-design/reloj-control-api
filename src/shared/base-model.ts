@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -12,7 +11,7 @@ export class BaseModel extends BaseEntity {
   id: number;
 
   @Column({ type: 'varchar', default: 'ACTIVO' })
-  estado;
+  estado: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
