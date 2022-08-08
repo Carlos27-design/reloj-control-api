@@ -7,9 +7,10 @@ export const AppDataSource = new DataSource({
   username: 'root',
   port: 3306,
   database: 'relojcontrol',
-  password: 'docker',
+  password: 'Cinet.2021%%',
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   //subscribers: [__dirname + '/../**/*.subscriber.{js,ts}'],
   migrations: [__dirname + '/migrations/*.{ts,js}'],
   synchronize: true,
 });
+
