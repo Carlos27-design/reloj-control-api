@@ -30,6 +30,7 @@ export class UsuarioController {
   }
 
   @Post()
+  @Auth(ValidRoles.ADMINISTRADOR)
   async create(@Body() usuario: Usuario): Promise<Usuario> {
     return await this._usuarioService.create(usuario);
   }
