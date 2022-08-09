@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+
 import { Auth } from './auth/decorators/auth.decorator';
 import { ValidRoles } from './auth/interface';
 import { Usuario } from './usuario.entity';

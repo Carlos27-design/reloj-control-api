@@ -7,12 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
+
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
-
 import { ValidRoles } from '../usuario/auth/interface';
-
 import { Trabajador } from './trabajador.entity';
 import { TrabajadorService } from './trabajador.service';
 
