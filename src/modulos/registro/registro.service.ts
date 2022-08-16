@@ -6,6 +6,7 @@ import { registroRepository } from './registro.repository';
 import { Registro } from './regitro.entity';
 import { ConfigService } from '@nestjs/config';
 import { stringify } from 'querystring';
+import { BusquedaMes } from './busqueda-mes';
 
 @Injectable()
 export class RegistroService {
@@ -91,5 +92,12 @@ export class RegistroService {
     }
 
     return registro;
+  }
+
+  public async getByMonth(busquedaMes: BusquedaMes) {
+    const registrosOnDate = await registroRepository
+      .createQueryBuilder('Registro')
+      .where('Registro.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere(`(DATE(Registro.fecha))`);
   }
 }
