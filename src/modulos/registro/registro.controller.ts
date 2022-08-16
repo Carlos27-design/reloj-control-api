@@ -21,6 +21,7 @@ import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
 import { Validate } from 'class-validator';
+import { BusquedaMes } from './busqueda-mes';
 
 @Controller('registro')
 export class RegistroController {
@@ -33,14 +34,18 @@ export class RegistroController {
   }
 
   @Get()
-  @Auth()
+  @Auth(ValidRoles.ADMINISTRADOR)
   getAll(@Request() req): Promise<Registro[]> {
     const trabajadorId = req.user.Trabajadores.id;
     return this.registroService.getAll(trabajadorId);
   }
 
+  @Post('encontrar-mes')
+  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
+  async getMes(@Body() busquedaMes: BusquedaMes) {}
+
   @Post()
-  @Auth()
+  @Auth(ValidRoles.ADMINISTRADOR)
   async create(@Body() registro: Registro, @Request() req): Promise<Registro> {
     const trabajadorId = req.user.Trabajadores.id;
     const correo = req.user.email;
