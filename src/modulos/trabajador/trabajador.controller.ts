@@ -34,6 +34,7 @@ export class TrabajadorController {
   }
 
   @Post()
+  @Auth(ValidRoles.ADMINISTRADOR)
   create(@Body() trabajador: Trabajador): Promise<Trabajador> {
     return this._trabajadorService.create(trabajador);
   }

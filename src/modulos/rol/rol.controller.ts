@@ -35,6 +35,7 @@ export class RolController {
   }
 
   @Post()
+  @Auth(ValidRoles.ADMINISTRADOR)
   create(@Body() rol: Rol): Promise<Rol> {
     return this._rolService.create(rol);
   }
