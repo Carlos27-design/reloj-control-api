@@ -45,7 +45,6 @@ export class RegistroController {
   async getMes(@Body() busquedaMes: BusquedaMes) {}
 
   @Post()
-  @Auth(ValidRoles.ADMINISTRADOR)
   async create(@Body() registro: Registro, @Request() req): Promise<Registro> {
     const trabajadorId = req.user.Trabajadores.id;
     const correo = req.user.email;
