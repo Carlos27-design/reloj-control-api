@@ -2,10 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AppDataSource } from './database/data-source';
+import * as fs from 'fs';
 
 async function bootstrap() {
   await AppDataSource.initialize();
-  const app = await NestFactory.create(AppModule);
+
+  const httpsOptions = {
+    key: fs.readFileSync('./relojcontrol.ml/privkey.pem'),
+    cert: fs.readFileSync('./relojcontrol.ml/fullchain.pem'),
+  };
+
+  const app = await NestFactory.create(AppModule, { httpsOptions });
   app.setGlobalPrefix('api');
   app.enableCors();
   app.use((req, res, next) => {
