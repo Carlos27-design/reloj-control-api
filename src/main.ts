@@ -6,13 +6,7 @@ import * as fs from 'fs';
 
 async function bootstrap() {
   await AppDataSource.initialize();
-
-  const httpsOptions = {
-    key: fs.readFileSync('./relojcontrol.ml/privkey.pem'),
-    cert: fs.readFileSync('./relojcontrol.ml/fullchain.pem'),
-  };
-
-  const app = await NestFactory.create(AppModule, { httpsOptions });
+  const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors();
   app.use((req, res, next) => {
