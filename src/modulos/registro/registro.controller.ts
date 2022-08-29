@@ -21,7 +21,7 @@ import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
 import { Validate } from 'class-validator';
-import { BusquedaMes } from './busqueda-mes';
+import { RangoFecha } from './rango-fecha';
 
 @Controller('registro')
 export class RegistroController {
@@ -40,9 +40,11 @@ export class RegistroController {
     return this.registroService.getAll(trabajadorId);
   }
 
-  @Post('encontrar-mes')
+  @Post('encontrar-fecha-rango')
   @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  async getMes(@Body() busquedaMes: BusquedaMes) {}
+  async getRangoFecha(@Body() rangoFecha: RangoFecha) {
+    return await this.registroService.getByDateInRange(rangoFecha);
+  }
 
   @Post()
   async create(@Body() registro: Registro, @Request() req): Promise<Registro> {

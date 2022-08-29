@@ -6,7 +6,7 @@ import { registroRepository } from './registro.repository';
 import { Registro } from './regitro.entity';
 import { ConfigService } from '@nestjs/config';
 import { stringify } from 'querystring';
-import { BusquedaMes } from './busqueda-mes';
+import { RangoFecha } from './rango-fecha';
 
 @Injectable()
 export class RegistroService {
@@ -94,10 +94,18 @@ export class RegistroService {
     return registro;
   }
 
-  public async getByMonth(busquedaMes: BusquedaMes) {
-    const registrosOnDate = await registroRepository
+  public async getByDateInRange(busquedaRangoFecha: RangoFecha) {
+    const registrosOnDate: Registro[] = await registroRepository
       .createQueryBuilder('Registro')
       .where('Registro.estado = :estado', { estado: estado.ACTIVO })
-      .andWhere(`(DATE(Registro.fecha))`);
+      .andWhere('Registro.fecha BEETWEEN :start_range AND :end_range', {
+        start_range: busquedaRangoFecha.inicio,
+        end_range: busquedaRangoFecha.fin,
+      })
+      .getMany();
+
+    if (!registrosOnDate) throw new NotFoundException();
+
+    return registrosOnDate;
   }
 }

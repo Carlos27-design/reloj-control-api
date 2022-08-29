@@ -7,7 +7,7 @@ export const AppDataSource = new DataSource({
   username: 'root',
   port: 3306,
   database: 'relojcontrol',
-  password: 'Cinet.2022%%',
+  password: 'Desector123',
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   //subscribers: [__dirname + '/../**/*.subscriber.{js,ts}'],
   migrations: [__dirname + '/migrations/*.{ts,js}'],
