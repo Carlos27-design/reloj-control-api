@@ -21,7 +21,7 @@ import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
 import { Validate } from 'class-validator';
-import { RangoFecha } from './rango-fecha';
+import { BusquedaRangoFecha } from './busquedaRangoFecha';
 
 @Controller('registro')
 export class RegistroController {
@@ -40,13 +40,30 @@ export class RegistroController {
     return this.registroService.getAll(trabajadorId);
   }
 
-  @Post('encontrar-fecha-rango')
-  @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
-  async getRangoFecha(@Body() rangoFecha: RangoFecha) {
-    return await this.registroService.getByDateInRange(rangoFecha);
+  @Post('/encontrar-fecha-rango/:id')
+  @Auth()
+  async getByDateInRange(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() busquedaRangoFecha: BusquedaRangoFecha,
+  ) {
+    return await this.registroService.getByDateInRange(id, busquedaRangoFecha);
+  }
+
+  @Post('/encontrar-fecha-rango')
+  @Auth()
+  async getByDateInRangeUser(
+    @Request() req,
+    @Body() busquedaRangoFecha: BusquedaRangoFecha,
+  ) {
+    const trabajadorId = req.user.Trabajadores.id;
+    return await this.registroService.getByDateInRangeUser(
+      trabajadorId,
+      busquedaRangoFecha,
+    );
   }
 
   @Post()
+  @Auth()
   async create(@Body() registro: Registro, @Request() req): Promise<Registro> {
     const trabajadorId = req.user.Trabajadores.id;
     const correo = req.user.email;

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { estado } from 'src/shared/estado.enum';
+
 import { Trabajador } from './trabajador.entity';
 import { trabajadorRepository } from './trabajador.repository';
 

@@ -2,11 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { estado } from 'src/shared/estado.enum';
 import { Trabajador } from '../trabajador/trabajador.entity';
 import { TrabajadorService } from '../trabajador/trabajador.service';
+import { BusquedaRangoFecha } from './busquedaRangoFecha';
 import { registroRepository } from './registro.repository';
 import { Registro } from './regitro.entity';
-import { ConfigService } from '@nestjs/config';
-import { stringify } from 'querystring';
-import { RangoFecha } from './rango-fecha';
+import * as m from 'moment';
 
 @Injectable()
 export class RegistroService {
@@ -94,18 +93,50 @@ export class RegistroService {
     return registro;
   }
 
-  public async getByDateInRange(busquedaRangoFecha: RangoFecha) {
+  public async getByDateInRange(id: number, rangoFecha: BusquedaRangoFecha) {
     const registrosOnDate: Registro[] = await registroRepository
       .createQueryBuilder('Registro')
       .where('Registro.estado = :estado', { estado: estado.ACTIVO })
-      .andWhere('Registro.fecha BEETWEEN :start_range AND :end_range', {
-        start_range: busquedaRangoFecha.inicio,
-        end_range: busquedaRangoFecha.fin,
+      .andWhere('Registro.Trabajador.id = :id', { id: id })
+      .andWhere('Registro.fecha BETWEEN :start_range AND :end_range', {
+        start_range: rangoFecha.inicio,
+        end_range: rangoFecha.fin,
+      })
+      .getMany();
+    let registros: Registro[] = [];
+
+    for (let i = 0; i < registrosOnDate.length; i++) {
+      const registro = registrosOnDate[i];
+      registros.push(await this.get(registro.id));
+    }
+
+    return registros;
+  }
+
+  public async getByDateInRangeUser(
+    trabajadorId: number,
+    rangoFecha: BusquedaRangoFecha,
+  ) {
+    const registrosOnDate: Registro[] = await registroRepository
+      .createQueryBuilder('Registro')
+      .leftJoinAndSelect('Registro.Trabajador', 'Trabajador')
+      .where('Registro.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere('Trabajador.id = :id', { id: trabajadorId })
+      .andWhere('Registro.fecha BETWEEN :start_range AND :end_range', {
+        start_range: rangoFecha.inicio,
+        end_range: rangoFecha.fin,
       })
       .getMany();
 
-    if (!registrosOnDate) throw new NotFoundException();
+    let registros: Registro[] = [];
 
-    return registrosOnDate;
+    for (let i = 0; i < registrosOnDate.length; i++) {
+      const registro = registrosOnDate[i];
+      registros.push(await this.get(registro.id));
+    }
+
+    console.log(registros);
+
+    return registros;
   }
 }
