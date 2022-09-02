@@ -76,6 +76,9 @@ export class RegistroController {
     const salidaNueva = new Date(registro.salida);
     const salida = this.extractHoras(salidaNueva);
     const fechaSalida = this.extractDate(salidaNueva);
+    const horaExtraNueva = new Date(registro.horaExtra);
+    const horaExtra = this.extractHoras(horaExtraNueva);
+    const fechaHoraExtra = this.extractDate(horaExtraNueva);
 
     if (registro.entrada) {
       await transporter.sendMail({
@@ -92,7 +95,7 @@ export class RegistroController {
                <br/>
                <b>Hora: ${entrada}</b>
                <br>
-               <b>Ubicación: ${registro.latitudEntrada},  ${registro.longitudEntrada}</b>
+               <b>Ubicación: ${registro.latitudEntrada}, ${registro.longitudEntrada}</b>
                `, // html body
       });
     }
@@ -113,6 +116,25 @@ export class RegistroController {
                <br>
                <b>Ubicación: ${registro.latitudSalida}, ${registro.longitudSalida}</b>
                `, // html body
+      });
+    }
+
+    if (registro.horaExtra) {
+      await transporter.sendMail({
+        from: '"Hora Extra" <desector123@gmail.com>',
+        to: correo,
+        subject: 'Hora Extra',
+        html: `<b>Marca: Hora Extra</b>
+               <br/>
+               <b>Nombre: ${trabajador}</b>
+               <br />
+               <b>Rut: ${rut}</b>
+               <br />
+               <b>Fecha: ${fechaHoraExtra}</b>
+               <br />
+               <b>Hora: ${horaExtra}</b>
+               <br />
+               <b>Ubicación: ${registro.latitudHoraExtra}, ${registro.longitudHoraExtra}</b>`,
       });
     }
 
