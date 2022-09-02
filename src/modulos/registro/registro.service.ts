@@ -5,7 +5,6 @@ import { TrabajadorService } from '../trabajador/trabajador.service';
 import { BusquedaRangoFecha } from './busquedaRangoFecha';
 import { registroRepository } from './registro.repository';
 import { Registro } from './regitro.entity';
-import * as m from 'moment';
 
 @Injectable()
 export class RegistroService {
@@ -47,6 +46,11 @@ export class RegistroService {
       registroNuevo.latitudSalida = registro.latitudSalida;
       registroNuevo.longitudSalida = registro.longitudSalida;
     }
+    if (registro.horaExtra) {
+      registroNuevo.horaExtra = new Date(registro.horaExtra);
+      registroNuevo.latitudHoraExtra = registro.latitudEntrada;
+      registroNuevo.longitudHoraExtra = registro.longitudHoraExtra;
+    }
 
     return await registroNuevo.save();
   }
@@ -79,7 +83,6 @@ export class RegistroService {
       })
       .andWhere('Registro.fecha = :fecha', { fecha: cadena })
       .andWhere('Registro.estado = :estado', { estado: estado.ACTIVO })
-
       .getOne();
 
     if (!registro) {
@@ -134,8 +137,6 @@ export class RegistroService {
       const registro = registrosOnDate[i];
       registros.push(await this.get(registro.id));
     }
-
-    console.log(registros);
 
     return registros;
   }
