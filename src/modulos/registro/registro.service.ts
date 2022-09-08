@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { estado } from 'src/shared/estado.enum';
 import { Trabajador } from '../trabajador/trabajador.entity';
+import { Registro } from './regitro.entity';
+
 import { TrabajadorService } from '../trabajador/trabajador.service';
 import { BusquedaRangoFecha } from './busquedaRangoFecha';
 import { registroRepository } from './registro.repository';
-import { Registro } from './regitro.entity';
 
 @Injectable()
 export class RegistroService {
@@ -36,10 +38,21 @@ export class RegistroService {
     registro.Trabajador = trabajador;
     registro.fecha = new Date(registro.fecha);
     let registroNuevo = await this.getRegistroHoy(trabajador, registro.fecha);
+
     if (registro.entrada) {
       registroNuevo.entrada = new Date(registro.entrada);
       registroNuevo.latitudEntrada = registro.latitudEntrada;
       registroNuevo.longitudEntrada = registro.longitudEntrada;
+    }
+    if (registro.salidaColacion) {
+      registroNuevo.salidaColacion = new Date(registro.salidaColacion);
+      registroNuevo.latitudSalidaColacion = registro.latitudSalidaColacion;
+      registroNuevo.longitudSalidaColacion = registro.longitudSalidaColacion;
+    }
+    if (registro.entradaColación) {
+      registroNuevo.entradaColación = new Date(registro.entradaColación);
+      registroNuevo.latitudEntradaColacion = registro.latitudEntradaColacion;
+      registroNuevo.longitudEntradaColacion = registro.longitudEntradaColacion;
     }
     if (registro.salida) {
       registroNuevo.salida = new Date(registro.salida);
@@ -48,7 +61,7 @@ export class RegistroService {
     }
     if (registro.horaExtra) {
       registroNuevo.horaExtra = new Date(registro.horaExtra);
-      registroNuevo.latitudHoraExtra = registro.latitudEntrada;
+      registroNuevo.latitudHoraExtra = registro.latitudHoraExtra;
       registroNuevo.longitudHoraExtra = registro.longitudHoraExtra;
     }
 
@@ -71,11 +84,9 @@ export class RegistroService {
     await registroDB.save();
   }
 
-  private async getRegistroHoy(
-    trabajador: Trabajador,
-    fecha: Date,
-  ): Promise<Registro> {
+  private async getRegistroHoy(trabajador: Trabajador, fecha: Date) {
     let cadena = fecha.toISOString().slice(0, 10);
+
     const registro = await registroRepository
       .createQueryBuilder('Registro')
       .where('Registro.Trabajador.id = :trabajadorId', {
@@ -90,7 +101,7 @@ export class RegistroService {
       registroNuevo.Trabajador = trabajador;
       registroNuevo.fecha = fecha;
 
-      return registroRepository.save(registroNuevo);
+      return await registroRepository.save(registroNuevo);
     }
 
     return registro;
@@ -139,5 +150,21 @@ export class RegistroService {
     }
 
     return registros;
+  }
+
+  public async getFecha(fecha: Registro): Promise<Registro> {
+    let fechas = new Date(fecha.fecha);
+
+    const cadena = fechas.toISOString().slice(0, 10);
+
+    const registro = await registroRepository
+      .createQueryBuilder('Registro')
+      .where('Registro.fecha = :fecha', { fecha: cadena })
+      .andWhere('Registro.estado = :estado', { estado: estado.ACTIVO })
+      .getOne();
+
+    if (!registro) throw new NotFoundException();
+
+    return registro;
   }
 }

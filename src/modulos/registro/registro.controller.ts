@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -20,7 +21,6 @@ import { RegistroService } from './registro.service';
 import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
-import { Validate } from 'class-validator';
 import { BusquedaRangoFecha } from './busquedaRangoFecha';
 
 @Controller('registro')
@@ -62,6 +62,12 @@ export class RegistroController {
     );
   }
 
+  @Post('/encontrar-fecha')
+  @Auth()
+  async getFecha(@Body() registro: Registro) {
+    return await this.registroService.getFecha(registro);
+  }
+
   @Post()
   @Auth()
   async create(@Body() registro: Registro, @Request() req): Promise<Registro> {
@@ -99,6 +105,47 @@ export class RegistroController {
                `, // html body
       });
     }
+
+    if (registro.salidaColacion) {
+      await transporter.sendMail({
+        from: '"Salida Colación " <desector123@gmail.com>', // sender address
+        to: correo, // list of receivers
+        subject: 'Salida Colación', // Subject line // plain text body
+        html: `<b>Marca: Salida Colación</b>
+               <br/>
+               <b>Nombre: ${trabajador}</b>
+               <br/>
+               <b>Rut: ${rut}</b>
+               <br/>
+               <b>Fecha: ${fechaSalida}</b>
+               <br/>
+               <b>Hora: ${salida}</b>
+               <br>
+               <b>Ubicación: ${registro.latitudSalidaColacion}, ${registro.longitudSalidaColacion}</b>
+               `, // html body
+      });
+    }
+
+    if (registro.entradaColación) {
+      await transporter.sendMail({
+        from: '"Entrada" <desector123@gmail.com>', // sender address
+        to: correo, // list of receivers
+        subject: 'Entrada', // Subject line // plain text body
+        html: `<b>Marca: Entrada</b>
+               <br/>
+               <b>Nombre: ${trabajador}</b>
+               <br/>
+               <b>Rut: ${rut}</b>
+               <br/>
+               <b>Fecha: ${fechaEntrada}</b>
+               <br/>
+               <b>Hora: ${entrada}</b>
+               <br>
+               <b>Ubicación: ${registro.latitudEntradaColacion}, ${registro.longitudEntradaColacion}</b>
+               `, // html body
+      });
+    }
+
     if (registro.salida) {
       await transporter.sendMail({
         from: '"Salida " <desector123@gmail.com>', // sender address
