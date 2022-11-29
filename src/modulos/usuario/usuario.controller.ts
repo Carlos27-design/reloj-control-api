@@ -36,6 +36,7 @@ export class UsuarioController {
   }
 
   @Patch(':id')
+  @Auth(ValidRoles.ADMINISTRADOR)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() usuario: Usuario,

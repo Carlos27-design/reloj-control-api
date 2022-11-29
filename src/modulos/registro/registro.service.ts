@@ -37,6 +37,7 @@ export class RegistroService {
     const trabajador = await this.trabajadorService.get(trabajadorId);
     registro.Trabajador = trabajador;
     registro.fecha = new Date(registro.fecha);
+
     let registroNuevo = await this.getRegistroHoy(trabajador, registro.fecha);
 
     if (registro.entrada) {
@@ -44,25 +45,23 @@ export class RegistroService {
       registroNuevo.latitudEntrada = registro.latitudEntrada;
       registroNuevo.longitudEntrada = registro.longitudEntrada;
     }
-    if (registro.salidaColacion) {
-      registroNuevo.salidaColacion = new Date(registro.salidaColacion);
-      registroNuevo.latitudSalidaColacion = registro.latitudSalidaColacion;
-      registroNuevo.longitudSalidaColacion = registro.longitudSalidaColacion;
-    }
-    if (registro.entradaColación) {
-      registroNuevo.entradaColación = new Date(registro.entradaColación);
-      registroNuevo.latitudEntradaColacion = registro.latitudEntradaColacion;
-      registroNuevo.longitudEntradaColacion = registro.longitudEntradaColacion;
-    }
+
     if (registro.salida) {
       registroNuevo.salida = new Date(registro.salida);
       registroNuevo.latitudSalida = registro.latitudSalida;
       registroNuevo.longitudSalida = registro.longitudSalida;
     }
-    if (registro.horaExtra) {
-      registroNuevo.horaExtra = new Date(registro.horaExtra);
-      registroNuevo.latitudHoraExtra = registro.latitudHoraExtra;
-      registroNuevo.longitudHoraExtra = registro.longitudHoraExtra;
+
+    if (registro.entradaColacion) {
+      registroNuevo.entradaColacion = new Date(registro.entradaColacion);
+      registroNuevo.latitudEntradaColacion = registro.latitudEntradaColacion;
+      registroNuevo.longitudEntradaColacion = registro.longitudEntradaColacion;
+    }
+
+    if (registro.salidaColacion) {
+      registroNuevo.salidaColacion = new Date(registro.salidaColacion);
+      registroNuevo.latitudSalidaColacion = registro.latitudSalidaColacion;
+      registroNuevo.longitudSalidaColacion = registro.longitudSalidaColacion;
     }
 
     return await registroNuevo.save();
@@ -94,13 +93,13 @@ export class RegistroService {
       })
       .andWhere('Registro.fecha = :fecha', { fecha: cadena })
       .andWhere('Registro.estado = :estado', { estado: estado.ACTIVO })
+
       .getOne();
 
     if (!registro) {
       let registroNuevo = new Registro();
       registroNuevo.Trabajador = trabajador;
       registroNuevo.fecha = fecha;
-
       return await registroRepository.save(registroNuevo);
     }
 

@@ -82,9 +82,12 @@ export class RegistroController {
     const salidaNueva = new Date(registro.salida);
     const salida = this.extractHoras(salidaNueva);
     const fechaSalida = this.extractDate(salidaNueva);
-    const horaExtraNueva = new Date(registro.horaExtra);
-    const horaExtra = this.extractHoras(horaExtraNueva);
-    const fechaHoraExtra = this.extractDate(horaExtraNueva);
+    const entradaColacionNuevo = new Date(registro.entradaColacion);
+    const entradaColacion = this.extractHoras(entradaColacionNuevo);
+    const fechaEntradaColacion = this.extractDate(entradaColacionNuevo);
+    const salidaColacionNuevo = new Date(registro.salidaColacion);
+    const salidaColacion = this.extractHoras(salidaColacionNuevo);
+    const fechaSalidaColacion = this.extractDate(salidaColacionNuevo);
 
     if (registro.entrada) {
       await transporter.sendMail({
@@ -102,46 +105,6 @@ export class RegistroController {
                <b>Hora: ${entrada}</b>
                <br>
                <b>Ubicación: ${registro.latitudEntrada}, ${registro.longitudEntrada}</b>
-               `, // html body
-      });
-    }
-
-    if (registro.salidaColacion) {
-      await transporter.sendMail({
-        from: '"Salida Colación " <desector123@gmail.com>', // sender address
-        to: correo, // list of receivers
-        subject: 'Salida Colación', // Subject line // plain text body
-        html: `<b>Marca: Salida Colación</b>
-               <br/>
-               <b>Nombre: ${trabajador}</b>
-               <br/>
-               <b>Rut: ${rut}</b>
-               <br/>
-               <b>Fecha: ${fechaSalida}</b>
-               <br/>
-               <b>Hora: ${salida}</b>
-               <br>
-               <b>Ubicación: ${registro.latitudSalidaColacion}, ${registro.longitudSalidaColacion}</b>
-               `, // html body
-      });
-    }
-
-    if (registro.entradaColación) {
-      await transporter.sendMail({
-        from: '"Entrada" <desector123@gmail.com>', // sender address
-        to: correo, // list of receivers
-        subject: 'Entrada', // Subject line // plain text body
-        html: `<b>Marca: Entrada</b>
-               <br/>
-               <b>Nombre: ${trabajador}</b>
-               <br/>
-               <b>Rut: ${rut}</b>
-               <br/>
-               <b>Fecha: ${fechaEntrada}</b>
-               <br/>
-               <b>Hora: ${entrada}</b>
-               <br>
-               <b>Ubicación: ${registro.latitudEntradaColacion}, ${registro.longitudEntradaColacion}</b>
                `, // html body
       });
     }
@@ -164,25 +127,46 @@ export class RegistroController {
                <b>Ubicación: ${registro.latitudSalida}, ${registro.longitudSalida}</b>
                `, // html body
       });
-    }
 
-    if (registro.horaExtra) {
-      await transporter.sendMail({
-        from: '"Hora Extra" <desector123@gmail.com>',
-        to: correo,
-        subject: 'Hora Extra',
-        html: `<b>Marca: Hora Extra</b>
+      if (registro.entradaColacion) {
+        await transporter.sendMail({
+          from: '"Entrada Colación" <desector123@gmail.com>', // sender address
+          to: correo, // list of receivers
+          subject: 'Entrada Colacion', // Subject line // plain text body
+          html: `<b>Marca: Entrada Colación</b>
+                 <br/>
+                 <b>Nombre: ${trabajador}</b>
+                 <br/>
+                 <b>Rut: ${rut}</b>
+                 <br/>
+                 <b>Fecha: ${fechaEntradaColacion}</b>
+                 <br/>
+                 <b>Hora: ${entradaColacion}</b>
+                 <br>
+                 <b>Ubicación: ${registro.latitudEntradaColacion}, ${registro.longitudEntradaColacion}</b>
+                 `, // html body
+        });
+      }
+
+      if (registro.salidaColacion) {
+        await transporter.sendMail({
+          from: '"Salida Colacion " <desector123@gmail.com>', // sender address
+          to: correo, // list of receivers
+          subject: 'Salida Colacion', // Subject line // plain text body
+          html: `<b>Marca: Salida Colacion</b>
                <br/>
                <b>Nombre: ${trabajador}</b>
-               <br />
+               <br/>
                <b>Rut: ${rut}</b>
-               <br />
-               <b>Fecha: ${fechaHoraExtra}</b>
-               <br />
-               <b>Hora: ${horaExtra}</b>
-               <br />
-               <b>Ubicación: ${registro.latitudHoraExtra}, ${registro.longitudHoraExtra}</b>`,
-      });
+               <br/>
+               <b>Fecha: ${fechaSalidaColacion}</b>
+               <br/>
+               <b>Hora: ${salidaColacion}</b>
+               <br>
+               <b>Ubicación: ${registro.latitudSalidaColacion}, ${registro.longitudSalidaColacion}</b>
+               `, // html body
+        });
+      }
     }
 
     return this.registroService.create(registro, trabajadorId);

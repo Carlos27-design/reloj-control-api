@@ -11,16 +11,13 @@ export class Registro extends BaseModel {
   entrada: Date;
 
   @Column({ type: 'datetime', nullable: true })
-  salidaColacion: Date;
-
-  @Column({ type: 'datetime', nullable: true })
-  entradaColación: Date;
-
-  @Column({ type: 'datetime', nullable: true })
   salida: Date;
 
   @Column({ type: 'datetime', nullable: true })
-  horaExtra: Date;
+  entradaColacion: Date;
+
+  @Column({ type: 'datetime', nullable: true })
+  salidaColacion: Date;
 
   @Column({ type: 'varchar', nullable: true })
   longitudEntrada: string;
@@ -35,22 +32,16 @@ export class Registro extends BaseModel {
   latitudSalida: string;
 
   @Column({ type: 'varchar', nullable: true })
-  latitudHoraExtra: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  longitudHoraExtra: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  latitudSalidaColacion: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  longitudSalidaColacion: string;
+  longitudEntradaColacion: string;
 
   @Column({ type: 'varchar', nullable: true })
   latitudEntradaColacion: string;
 
   @Column({ type: 'varchar', nullable: true })
-  longitudEntradaColacion: string;
+  longitudSalidaColacion: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  latitudSalidaColacion: string;
 
   @ManyToOne(() => Trabajador, { nullable: false })
   Trabajador: Trabajador;
