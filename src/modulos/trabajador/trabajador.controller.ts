@@ -7,13 +7,9 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
-import { RoleProtected } from '../usuario/auth/decorators/role-protected.decorator';
 import { ValidRoles } from '../usuario/auth/interface';
-import { JwtAuthGuard } from '../usuario/auth/local-auth.guard';
-import { UserRoleGuard } from '../usuario/auth/user-role.guard';
 import { Trabajador } from './trabajador.entity';
 import { TrabajadorService } from './trabajador.service';
 
