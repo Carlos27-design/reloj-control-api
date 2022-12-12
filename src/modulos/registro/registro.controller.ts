@@ -134,46 +134,46 @@ export class RegistroController {
                <b>Ubicación: ${registro.latitudSalida}, ${registro.longitudSalida}</b>
                `, // html body
       });
+    }
 
-      if (registro.entradaColacion) {
-        await transporter.sendMail({
-          from: '"Entrada Colación" <desector123@gmail.com>', // sender address
-          to: correo, // list of receivers
-          subject: 'Entrada Colacion', // Subject line // plain text body
-          html: `<b>Marca: Entrada Colación</b>
-                 <br/>
-                 <b>Nombre: ${trabajador}</b>
-                 <br/>
-                 <b>Rut: ${rut}</b>
-                 <br/>
-                 <b>Fecha: ${fechaEntradaColacion}</b>
-                 <br/>
-                 <b>Hora: ${entradaColacion}</b>
-                 <br>
-                 <b>Ubicación: ${registro.latitudEntradaColacion}, ${registro.longitudEntradaColacion}</b>
-                 `, // html body
-        });
-      }
-
-      if (registro.salidaColacion) {
-        await transporter.sendMail({
-          from: '"Salida Colacion " <desector123@gmail.com>', // sender address
-          to: correo, // list of receivers
-          subject: 'Salida Colacion', // Subject line // plain text body
-          html: `<b>Marca: Salida Colacion</b>
+    if (registro.entradaColacion) {
+      await transporter.sendMail({
+        from: '"Entrada Colación" <desector123@gmail.com>', // sender address
+        to: correo, // list of receivers
+        subject: 'Entrada Colacion', // Subject line // plain text body
+        html: `<b>Marca: Entrada Colación</b>.
                <br/>
                <b>Nombre: ${trabajador}</b>
                <br/>
                <b>Rut: ${rut}</b>
                <br/>
-               <b>Fecha: ${fechaSalidaColacion}</b>
+               <b>Fecha: ${fechaEntradaColacion}</b>
                <br/>
-               <b>Hora: ${salidaColacion}</b>
+               <b>Hora: ${entradaColacion}</b>
                <br>
-               <b>Ubicación: ${registro.latitudSalidaColacion}, ${registro.longitudSalidaColacion}</b>
+               <b>Ubicación: ${registro.latitudEntradaColacion}, ${registro.longitudEntradaColacion}</b>
                `, // html body
-        });
-      }
+      });
+    }
+
+    if (registro.salidaColacion) {
+      await transporter.sendMail({
+        from: '"Salida Colacion " <desector123@gmail.com>', // sender address
+        to: correo, // list of receivers
+        subject: 'Salida Colacion', // Subject line // plain text body
+        html: `<b>Marca: Salida Colacion</b>
+             <br/>
+             <b>Nombre: ${trabajador}</b>
+             <br/>
+             <b>Rut: ${rut}</b>
+             <br/>
+             <b>Fecha: ${fechaSalidaColacion}</b>
+             <br/>
+             <b>Hora: ${salidaColacion}</b>
+             <br>
+             <b>Ubicación: ${registro.latitudSalidaColacion}, ${registro.longitudSalidaColacion}</b>
+             `, // html body
+      });
     }
 
     return this.registroService.create(registro, trabajadorId);

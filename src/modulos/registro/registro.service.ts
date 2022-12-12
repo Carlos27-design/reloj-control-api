@@ -99,7 +99,6 @@ export class RegistroService {
 
   private async getRegistroHoy(trabajador: Trabajador, fecha: Date) {
     let cadena = fecha.toISOString().slice(0, 10);
-
     const registro = await registroRepository
       .createQueryBuilder('Registro')
       .where('Registro.Trabajador.id = :trabajadorId', {
@@ -107,7 +106,6 @@ export class RegistroService {
       })
       .andWhere('Registro.fecha = :fecha', { fecha: cadena })
       .andWhere('Registro.estado = :estado', { estado: estado.ACTIVO })
-
       .getOne();
 
     if (!registro) {
@@ -167,7 +165,6 @@ export class RegistroService {
 
   public async getFecha(fecha: Registro): Promise<Registro> {
     let fechas = new Date(fecha.fecha);
-
     const cadena = fechas.toISOString().slice(0, 10);
 
     const registro = await registroRepository
