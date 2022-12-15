@@ -27,13 +27,6 @@ import { BusquedaRangoFecha } from './busquedaRangoFecha';
 export class RegistroController {
   constructor(private registroService: RegistroService) {}
 
-  @Get('/mi-ultimo-registro')
-  @Auth()
-  ultimoRegistro(@Request() req): Promise<Registro> {
-    const trabajadorId = req.user.Trabajadores.id;
-    return this.registroService.getUltimoRegistro(trabajadorId);
-  }
-
   @Get(':id')
   @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)
   get(@Param('id', ParseIntPipe) id: number): Promise<Registro> {
