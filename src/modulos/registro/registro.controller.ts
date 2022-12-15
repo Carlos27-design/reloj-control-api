@@ -12,11 +12,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { RoleProtected } from '../usuario/auth/decorators/role-protected.decorator';
 import { ValidRoles } from '../usuario/auth/interface';
-
-import { JwtAuthGuard } from '../usuario/auth/local-auth.guard';
-import { UserRoleGuard } from '../usuario/auth/user-role.guard';
 import { RegistroService } from './registro.service';
 import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
