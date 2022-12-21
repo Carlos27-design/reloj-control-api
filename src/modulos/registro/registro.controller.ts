@@ -12,7 +12,11 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { RoleProtected } from '../usuario/auth/decorators/role-protected.decorator';
 import { ValidRoles } from '../usuario/auth/interface';
+
+import { JwtAuthGuard } from '../usuario/auth/local-auth.guard';
+import { UserRoleGuard } from '../usuario/auth/user-role.guard';
 import { RegistroService } from './registro.service';
 import { Registro } from './regitro.entity';
 import { transporter } from './correo/node-mailer';
@@ -22,6 +26,13 @@ import { BusquedaRangoFecha } from './busquedaRangoFecha';
 @Controller('registro')
 export class RegistroController {
   constructor(private registroService: RegistroService) {}
+
+  @Get('/mi-ultimo-registro')
+  @Auth()
+  ultimoRegistro(@Request() req): Promise<Registro> {
+    const trabajadorId = req.user.Trabajadores.id;
+    return this.registroService.getUltimoRegistro(trabajadorId);
+  }
 
   @Get(':id')
   @Auth(ValidRoles.ADMINISTRADOR, ValidRoles.RECURSOSHUMANOS)

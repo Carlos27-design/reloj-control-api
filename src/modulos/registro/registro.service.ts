@@ -24,6 +24,20 @@ export class RegistroService {
     return registro;
   }
 
+  async getUltimoRegistro(trabajadorId: number): Promise<Registro> {
+    const registro = await registroRepository
+      .createQueryBuilder('Registro')
+      .leftJoinAndSelect('Registro.Trabajador', 'Trabajador')
+      .where('Trabajador.id = :id', { id: trabajadorId })
+      .andWhere('Registro.estado = :estado', { estado: estado.ACTIVO })
+      .orderBy('Registro.id', 'DESC')
+      .getOne();
+
+    if (!registro) throw new NotFoundException();
+
+    return registro;
+  }
+
   getAll(id: number): Promise<Registro[]> {
     return registroRepository
       .createQueryBuilder('Registro')

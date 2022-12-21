@@ -1,5 +1,6 @@
 import { BaseModel } from 'src/shared/base-model';
 import { Column, Entity, OneToMany } from 'typeorm';
+import { Entrada } from '../entrada/entrada.entity';
 
 import { Registro } from '../registro/regitro.entity';
 
