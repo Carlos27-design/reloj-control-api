@@ -36,6 +36,7 @@ export class EntradaController {
   }
 
   @Post()
+  @Auth()
   create(@Body() entrada: Entrada): Promise<Entrada> {
     return this.entradaService.create(entrada);
   }
