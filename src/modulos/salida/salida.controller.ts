@@ -6,6 +6,7 @@ import {
   Body,
   Patch,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 
@@ -37,8 +38,10 @@ export class SalidaController {
 
   @Post()
   @Auth()
-  create(@Body() salida: Salida): Promise<Salida> {
-    return this.salidaService.create(salida);
+  create(@Body() salida: Salida, @Request() req): Promise<Salida> {
+    const trabajadorId = req.user.Trabajadores.id;
+    salida.Trabajador.id = trabajadorId;
+    return this.salidaService.create(salida, trabajadorId);
   }
 
   @Patch(':id')

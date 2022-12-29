@@ -1,5 +1,5 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { Body, Delete, Patch, Post } from '@nestjs/common/decorators';
+import { Body, Delete, Patch, Post, Request } from '@nestjs/common/decorators';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
 import { SalidaColacion } from './salida-colacion.entity';
 import { SalidaColacionService } from './salida-colacion.service';
@@ -28,8 +28,13 @@ export class SalidaColacionController {
 
   @Post()
   @Auth()
-  create(@Body() salidaColacion: SalidaColacion): Promise<SalidaColacion> {
-    return this.salidaColacionService.create(salidaColacion);
+  create(
+    @Body() salidaColacion: SalidaColacion,
+    @Request() req,
+  ): Promise<SalidaColacion> {
+    const trabajadorId = req.user.Trabajadores.id;
+    salidaColacion.Trabajador.id = trabajadorId;
+    return this.salidaColacionService.create(salidaColacion, trabajadorId);
   }
 
   @Patch(':id')

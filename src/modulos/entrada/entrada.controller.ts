@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Request,
 } from '@nestjs/common';
 
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
@@ -19,8 +20,9 @@ export class EntradaController {
 
   @Get('ultimo-registro-entrada')
   @Auth()
-  getUltimoRegistro(): Promise<Entrada> {
-    return this.entradaService.getUltimoRegistro();
+  getUltimoRegistro(@Request() req): Promise<Entrada> {
+    const trabajadorId = req.user.Trabajadores.id;
+    return this.entradaService.getUltimoRegistro(trabajadorId);
   }
 
   @Get(':id')
@@ -37,8 +39,10 @@ export class EntradaController {
 
   @Post()
   @Auth()
-  create(@Body() entrada: Entrada): Promise<Entrada> {
-    return this.entradaService.create(entrada);
+  create(@Body() entrada: Entrada, @Request() req): Promise<Entrada> {
+    const trabajadorId = req.user.Trabajadores.id;
+    entrada.Trabajador.id = trabajadorId;
+    return this.entradaService.create(entrada, trabajadorId);
   }
 
   @Patch(':id')

@@ -6,4 +6,7 @@ import { Trabajador } from '../trabajador/trabajador.entity';
 export class Entrada extends BaseModel {
   @Column({ type: 'boolean', nullable: false })
   botonEstado: boolean;
+
+  @ManyToOne(() => Trabajador, { nullable: false })
+  Trabajador: Trabajador;
 }

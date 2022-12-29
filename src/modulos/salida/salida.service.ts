@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 
 import { estado } from 'src/shared/estado.enum';
+import { Trabajador } from '../trabajador/trabajador.entity';
 import { Salida } from './salida.entity';
 import { salidaRepository } from './salida.repository';
 
@@ -38,7 +39,11 @@ export class SalidaService {
       .getMany();
   }
 
-  public create(salida: Salida): Promise<Salida> {
+  public create(salida: Salida, trabajadorId: number): Promise<Salida> {
+    const trabajador: Trabajador = new Trabajador();
+    trabajador.id = trabajadorId;
+    salida.Trabajador = trabajador;
+    console.log(trabajador);
     return salidaRepository.save(salida);
   }
 

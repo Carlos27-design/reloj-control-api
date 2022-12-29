@@ -6,6 +6,7 @@ import {
   Body,
   Patch,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
 import { Auth } from '../usuario/auth/decorators/auth.decorator';
@@ -37,8 +38,13 @@ export class EntradaColacionController {
 
   @Post()
   @Auth()
-  create(@Body() entradaColacion: EntradaColacion): Promise<EntradaColacion> {
-    return this.entradaColacionService.create(entradaColacion);
+  create(
+    @Body() entradaColacion: EntradaColacion,
+    @Request() req,
+  ): Promise<EntradaColacion> {
+    const trabajadorId = req.user.Trabajadores.id;
+    entradaColacion.Trabajador.id = trabajadorId;
+    return this.entradaColacionService.create(entradaColacion, trabajadorId);
   }
 
   @Patch()
