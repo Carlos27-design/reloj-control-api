@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 
 import { estado } from 'src/shared/estado.enum';
+import { Entrada } from '../entrada/entrada.entity';
 import { Trabajador } from '../trabajador/trabajador.entity';
 import { EntradaColacion } from './entrada-colacion.entity';
 import { entradaColacionRepository } from './entrada-colacion.repository';
@@ -20,10 +21,14 @@ export class EntradaColacionService {
     return entradaColacion;
   }
 
-  public async getUltimoRegistro(): Promise<EntradaColacion> {
+  public async getUltimoRegistro(
+    trabajadorId: number,
+  ): Promise<EntradaColacion> {
     const entradaColacion = await entradaColacionRepository
       .createQueryBuilder('EntradaColacion')
+      .leftJoinAndSelect('EntradaColacion.Trabajador', 'Trabajador')
       .where('EntradaColacion.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere('Trabajador.id = :id', { id: trabajadorId })
       .orderBy('EntradaColacion.id', 'DESC')
       .getOne();
 

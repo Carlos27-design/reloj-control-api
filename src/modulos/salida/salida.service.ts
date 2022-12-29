@@ -20,10 +20,12 @@ export class SalidaService {
     return salida;
   }
 
-  public async getUltimoRegistro(): Promise<Salida> {
+  public async getUltimoRegistro(trabajadorId: number): Promise<Salida> {
     const salida = await salidaRepository
       .createQueryBuilder('Salida')
+      .leftJoinAndSelect('Salida.Trabajador', 'Trabajador')
       .where('Salida.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere('Trabajador.id = :id', { id: trabajadorId })
       .orderBy('Salida.id', 'DESC')
       .getOne();
 

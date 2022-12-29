@@ -20,8 +20,9 @@ export class EntradaColacionController {
 
   @Get('ultimo-registro-entradacolacion')
   @Auth()
-  getUltimoRegistro(): Promise<EntradaColacion> {
-    return this.entradaColacionService.getUltimoRegistro();
+  getUltimoRegistro(@Request() req): Promise<EntradaColacion> {
+    const trabajadorId = req.user.Trabajadores.id;
+    return this.entradaColacionService.getUltimoRegistro(trabajadorId);
   }
 
   @Get(':id')

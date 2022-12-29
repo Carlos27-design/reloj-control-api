@@ -18,10 +18,12 @@ export class SalidaColacionService {
     return salidaColacion;
   }
 
-  public async getUtimoRegistro(): Promise<SalidaColacion> {
+  public async getUtimoRegistro(trabajadorId: number): Promise<SalidaColacion> {
     const salidaColacion = await salidaColacionRepository
       .createQueryBuilder('SalidaColacion')
+      .leftJoinAndSelect('SalidaColacion.Trabajador', 'Trabajador')
       .where('SalidaColacion.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere('Trabajador.id = :id', { id: trabajadorId })
       .orderBy('SalidaColacion.id', 'DESC')
       .getOne();
 
