@@ -21,7 +21,7 @@ export class SalidaController {
   @Get('ultimo-registro-salida')
   @Auth()
   getUltimoRegistro(@Request() req): Promise<Salida> {
-    const trabajadorId = req.user.Traabajadores.id;
+    const trabajadorId = req.user.Trabajadores.id;
     return this.salidaService.getUltimoRegistro(trabajadorId);
   }
 
@@ -41,7 +41,7 @@ export class SalidaController {
   @Auth()
   create(@Body() salida: Salida, @Request() req): Promise<Salida> {
     const trabajadorId = req.user.Trabajadores.id;
-    salida.Trabajador.id = trabajadorId;
+    salida.Trabajador = trabajadorId;
     return this.salidaService.create(salida, trabajadorId);
   }
 

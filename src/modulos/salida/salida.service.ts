@@ -24,8 +24,8 @@ export class SalidaService {
     const salida = await salidaRepository
       .createQueryBuilder('Salida')
       .leftJoinAndSelect('Salida.Trabajador', 'Trabajador')
-      .where('Salida.estado = :estado', { estado: estado.ACTIVO })
-      .andWhere('Trabajador.id = :id', { id: trabajadorId })
+      .where('Trabajador.id = :id', { id: trabajadorId })
+      .andWhere('Salida.estado = :estado', { estado: estado.ACTIVO })
       .orderBy('Salida.id', 'DESC')
       .getOne();
 
@@ -45,7 +45,6 @@ export class SalidaService {
     const trabajador: Trabajador = new Trabajador();
     trabajador.id = trabajadorId;
     salida.Trabajador = trabajador;
-    console.log(trabajador);
     return salidaRepository.save(salida);
   }
 

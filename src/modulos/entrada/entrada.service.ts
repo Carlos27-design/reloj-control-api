@@ -26,7 +26,7 @@ export class EntradaService {
       .createQueryBuilder('Entrada')
       .leftJoinAndSelect('Entrada.Trabajador', 'Trabajador')
       .where('Trabajador.id = :id', { id: trabajadorId })
-      .where('Entrada.estado = :estado', { estado: estado.ACTIVO })
+      .andWhere('Entrada.estado = :estado', { estado: estado.ACTIVO })
       .orderBy('Entrada.id', 'DESC')
       .getOne();
 
@@ -46,7 +46,6 @@ export class EntradaService {
     const trabajador: Trabajador = new Trabajador();
     trabajador.id = trabajadorId;
     entrada.Trabajador = trabajador;
-    console.log(trabajador);
     return entradaRepository.save(entrada);
   }
 

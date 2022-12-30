@@ -41,7 +41,7 @@ export class EntradaController {
   @Auth()
   create(@Body() entrada: Entrada, @Request() req): Promise<Entrada> {
     const trabajadorId = req.user.Trabajadores.id;
-    entrada.Trabajador.id = trabajadorId;
+    entrada.Trabajador = trabajadorId;
     return this.entradaService.create(entrada, trabajadorId);
   }
 

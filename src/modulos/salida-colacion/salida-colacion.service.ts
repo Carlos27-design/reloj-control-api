@@ -22,8 +22,8 @@ export class SalidaColacionService {
     const salidaColacion = await salidaColacionRepository
       .createQueryBuilder('SalidaColacion')
       .leftJoinAndSelect('SalidaColacion.Trabajador', 'Trabajador')
-      .where('SalidaColacion.estado = :estado', { estado: estado.ACTIVO })
-      .andWhere('Trabajador.id = :id', { id: trabajadorId })
+      .where('Trabajador.id = :id', { id: trabajadorId })
+      .andWhere('SalidaColacion.estado = :estado', { estado: estado.ACTIVO })
       .orderBy('SalidaColacion.id', 'DESC')
       .getOne();
 

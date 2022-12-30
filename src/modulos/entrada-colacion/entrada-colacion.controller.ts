@@ -44,7 +44,7 @@ export class EntradaColacionController {
     @Request() req,
   ): Promise<EntradaColacion> {
     const trabajadorId = req.user.Trabajadores.id;
-    entradaColacion.Trabajador.id = trabajadorId;
+    entradaColacion.Trabajador = trabajadorId;
     return this.entradaColacionService.create(entradaColacion, trabajadorId);
   }
 
