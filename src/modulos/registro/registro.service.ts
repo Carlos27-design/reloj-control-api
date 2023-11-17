@@ -54,25 +54,25 @@ export class RegistroService {
 
     let registroNuevo = await this.getRegistroHoy(trabajador, registro.fecha);
 
-    if (registro.entrada) {
+    if (registro.entrada !== undefined && registro.entrada !== null) {
       registroNuevo.entrada = new Date(registro.entrada);
       registroNuevo.latitudEntrada = registro.latitudEntrada;
       registroNuevo.longitudEntrada = registro.longitudEntrada;
     }
 
-    if (registro.salida) {
+    if (registro.salida !== undefined && registro.salida !== null) {
       registroNuevo.salida = new Date(registro.salida);
       registroNuevo.latitudSalida = registro.latitudSalida;
       registroNuevo.longitudSalida = registro.longitudSalida;
     }
 
-    if (registro.entradaColacion) {
+    if (registro.entradaColacion !== undefined && registro.entradaColacion !== null) {
       registroNuevo.entradaColacion = new Date(registro.entradaColacion);
       registroNuevo.latitudEntradaColacion = registro.latitudEntradaColacion;
       registroNuevo.longitudEntradaColacion = registro.longitudEntradaColacion;
     }
 
-    if (registro.salidaColacion) {
+    if (registro.salidaColacion ! == undefined && registro.salidaColacion !== null) {
       registroNuevo.salidaColacion = new Date(registro.salidaColacion);
       registroNuevo.latitudSalidaColacion = registro.latitudSalidaColacion;
       registroNuevo.longitudSalidaColacion = registro.longitudSalidaColacion;
